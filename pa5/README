@@ -1,0 +1,12 @@
+//Rami Alrwais
+//ID #1403536
+//CMPS 101
+//README 
+//Lists contents of PA5
+1. GraphTest.c //Tests the Graph ADT
+2. Graph.c //Graph operation data type
+3. Graph.h //Header file for Graph.c 
+4. List.c  // List operation data type
+5. List.h //header file for List.c
+6. Makefile //Creates executable's for PA5
+7. FindComponents.c //Finds strongly connected components of graph

@@ -1,0 +1,36 @@
+Adjacency list representation of G:
+1: 2 7
+2: 3 5
+3: 4
+4: 2
+5: 8 11
+6: 7 10
+7: 8
+8: 9
+9: 6 7
+10: 13 19
+11: 13 24
+12: 11 14
+13: 12
+14: 17
+15: 16 23
+16: 17
+17: 15 18
+18: 19
+19: 17
+20: 21
+21: 22
+22: 23
+23: 24
+24: 20
+
+G contains 9 strongly connected components:
+Component1: 1 
+Component2: 2 4 3 
+Component3: 5 
+Component4: 8 7 6 9 
+Component5: 10 
+Component6: 13 11 12 
+Component7: 14 
+Component8: 17 19 18 16 15 
+Component9: 24 23 22 21 20 
