@@ -1,0 +1,9 @@
+//Rami Alrwais
+//CS 101
+//ID #1403536
+//README for PA2
+1.)ListClient.c //ListClient for list.c
+2.)Makefile     //Makefile for PA2
+3.)Lex.c        //Lex.c to be used with List.c
+4.)List.c       //implementation file for list ADT
+5.)List.h       //containts all methods used in List ADT

@@ -1,0 +1,78 @@
+==24717== Memcheck, a memory error detector
+==24717== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==24717== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==24717== Command: Lex infile3.txt outfile3.txt
+==24717== 
+--24717-- Valgrind options:
+--24717--    --leak-check=full
+--24717--    -v
+--24717-- Contents of /proc/version:
+--24717--   Linux version 3.10.0-693.21.1.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-16) (GCC) ) #1 SMP Wed Mar 7 19:03:37 UTC 2018
+--24717-- 
+--24717-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-rdtscp-sse3-avx
+--24717-- Page sizes: currently 4096, max supported 4096
+--24717-- Valgrind library directory: /opt/rh/devtoolset-7/root/usr/lib64/valgrind
+--24717-- Reading syms from /afs/cats.ucsc.edu/users/i/raalrwai/cs101/pa2/Lex
+--24717-- Reading syms from /usr/lib64/ld-2.17.so
+--24717--   Considering /usr/lib/debug/usr/lib64/ld-2.17.so.debug ..
+--24717--   .. CRC mismatch (computed 61e7c7aa wanted 3c6444e6)
+--24717-- Reading syms from /opt/rh/devtoolset-7/root/usr/lib64/valgrind/memcheck-amd64-linux
+--24717--    object doesn't have a symbol table
+--24717--    object doesn't have a dynamic symbol table
+--24717-- Scheduler: using generic scheduler lock implementation.
+--24717-- Reading suppressions file: /opt/rh/devtoolset-7/root/usr/lib64/valgrind/default.supp
+==24717== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-24717-by-raalrwai-on-unix3
+==24717== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-24717-by-raalrwai-on-unix3
+==24717== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-24717-by-raalrwai-on-unix3
+==24717== 
+==24717== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==24717== don't want to do, unless you know exactly what you're doing,
+==24717== or are doing some strange experiment):
+==24717==   /opt/rh/devtoolset-7/root/usr/lib64/valgrind/../../bin/vgdb --pid=24717 ...command...
+==24717== 
+==24717== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==24717==   /path/to/gdb Lex
+==24717== and then give GDB the following command
+==24717==   target remote | /opt/rh/devtoolset-7/root/usr/lib64/valgrind/../../bin/vgdb --pid=24717
+==24717== --pid is optional if only one valgrind process is running
+==24717== 
+--24717-- REDIR: 0x4019f70 (ld-linux-x86-64.so.2:strlen) redirected to 0x58059d91 (???)
+--24717-- REDIR: 0x4019d40 (ld-linux-x86-64.so.2:index) redirected to 0x58059dab (???)
+--24717-- Reading syms from /opt/rh/devtoolset-7/root/usr/lib64/valgrind/vgpreload_core-amd64-linux.so
+--24717-- Reading syms from /opt/rh/devtoolset-7/root/usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so
+==24717== WARNING: new redirection conflicts with existing -- ignoring it
+--24717--     old: 0x04019f70 (strlen              ) R-> (0000.0) 0x58059d91 ???
+--24717--     new: 0x04019f70 (strlen              ) R-> (2007.0) 0x04c2ca70 strlen
+--24717-- REDIR: 0x4019ef0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c2dbc0 (strcmp)
+--24717-- REDIR: 0x401aae0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c30c40 (mempcpy)
+--24717-- Reading syms from /usr/lib64/libc-2.17.so
+--24717--   Considering /usr/lib/debug/usr/lib64/libc-2.17.so.debug ..
+--24717--   .. CRC mismatch (computed 7faa757e wanted eb2e1e94)
+--24717-- REDIR: 0x4ec5e40 (libc.so.6:strcasecmp) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ec2bc0 (libc.so.6:strnlen) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ec8110 (libc.so.6:strncasecmp) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ec5620 (libc.so.6:memset) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ec55d0 (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ec45b0 (libc.so.6:__GI_strrchr) redirected to 0x4c2c430 (__GI_strrchr)
+--24717-- REDIR: 0x4ebb800 (libc.so.6:malloc) redirected to 0x4c29b3c (malloc)
+--24717-- REDIR: 0x4edb630 (libc.so.6:__GI_strstr) redirected to 0x4c30ed0 (__strstr_sse2)
+--24717-- REDIR: 0x4ec4cb0 (libc.so.6:memchr) redirected to 0x4c2dc60 (memchr)
+--24717-- REDIR: 0x4eca850 (libc.so.6:__GI_memcpy) redirected to 0x4c2e560 (__GI_memcpy)
+--24717-- REDIR: 0x4ec2a90 (libc.so.6:strlen) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4fa4fe0 (libc.so.6:__strlen_sse2_pminub) redirected to 0x4c2c9b0 (strlen)
+--24717-- REDIR: 0x4ec24d0 (libc.so.6:strcpy) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4ed03f0 (libc.so.6:__strcpy_sse2_unaligned) redirected to 0x4c2ca90 (strcpy)
+--24717-- REDIR: 0x4ec1040 (libc.so.6:strcmp) redirected to 0x4a24740 (_vgnU_ifunc_wrapper)
+--24717-- REDIR: 0x4f746f0 (libc.so.6:__strcmp_sse42) redirected to 0x4c2db70 (__strcmp_sse42)
+--24717-- REDIR: 0x4ec2ae0 (libc.so.6:__GI_strlen) redirected to 0x4c2c9d0 (__GI_strlen)
+--24717-- REDIR: 0x4ec57f0 (libc.so.6:__GI_mempcpy) redirected to 0x4c30970 (__GI_mempcpy)
+--24717-- REDIR: 0x4ebbc20 (libc.so.6:free) redirected to 0x4c2ac36 (free)
+==24717== 
+==24717== HEAP SUMMARY:
+==24717==     in use at exit: 0 bytes in 0 blocks
+==24717==   total heap usage: 30 allocs, 30 frees, 13,701 bytes allocated
+==24717== 
+==24717== All heap blocks were freed -- no leaks are possible
+==24717== 
+==24717== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==24717== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

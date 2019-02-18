@@ -1,0 +1,366 @@
+public class Matrix{
+  List rows[] = null;
+  int matrixSize = 0;
+  int nnz;
+  private class Entry{
+
+    double value;
+    int column;
+
+    Entry(int column, double value){
+      this.value = value;
+      this.column = column;
+    }
+    public String toString(){
+      StringBuffer theBuffer = new StringBuffer();
+      theBuffer.append("(" + column +","+value+")");
+      return theBuffer.toString();
+    }
+    public boolean equals(Object x){
+      boolean eq = false;
+      Entry thiss;
+      if(x instanceof Entry){
+        thiss = (Entry)x;
+        eq = (this.value == thiss.value);
+
+      }
+      return eq;
+    }
+
+  }
+
+
+  public Matrix(int n){
+    if( n < 1 ) throw new RuntimeException("error");
+    else{
+      rows = new List[n];
+      for(int i = 0; i < n; i++)
+        rows[i] = new List();
+      matrixSize = n;
+    }
+  }
+  //Access functions
+  int getSize(){
+    return this.matrixSize;
+  }
+
+  int getNNZ(){
+    return this.nnz;
+  }
+
+  /*public boolean equals(Object x){
+    Matrix that;
+    if(x instanceof Matrix){
+    that = (Matrix)x;
+    if(getSize() != that.getSize()){
+    return false;
+    }
+    for(int i =1; i<=getSize(); i++){
+    if(!(rows[i].equals(that.rows[i])))
+    return false;
+    }
+    }
+    return true;
+  }
+  */
+
+  public boolean equals(Object x){
+    if (!(x instanceof Matrix)) return false;
+    Matrix m = (Matrix) x;
+    if(m.nnz != this.nnz){
+      return false;
+    }
+    if(m.matrixSize != this.matrixSize){
+      return false;
+    }
+    for(int i = 0; i<matrixSize; i++){
+      if(!(m.rows[i].equals(rows[i]))){
+        return false;
+      }
+    }
+    return true;
+  }
+  /*  public boolean equals(Object x){
+      Matrix that;
+      if (x instanceof Matrix){
+      that = (Matrix)x;
+      if(getSize() != that.getSize()){
+      return false;
+      }
+      for(int i = 1; i <= getSize(); i++){
+      if(!rows[i].equals(that.rows[i]))
+      return false;
+      }
+      }
+      return true;
+      }*/
+  //Manipulation procedures
+
+  void makeZero(){
+    nnz = 0;
+    for(int i=0; i<this.matrixSize; i++){
+      this.rows[i] = new List();
+    }
+  }
+  Matrix copy() {
+    Matrix newMatrix = new Matrix(matrixSize);
+    for (int i = 0; i < matrixSize; i++) {
+      if (!rows[i].isEmpty()) {
+        rows[i].moveFront();
+        while (rows[i].index() != -1) {
+          Entry entry = (Entry)rows[i].get();
+          newMatrix.changeEntry(i + 1, entry.column, entry.value);
+          rows[i].moveNext();
+        }
+      }
+    }
+    return newMatrix;
+  }
+  /*  Matrix copy(){
+      Matrix Y = new Matrix(matrixSize);
+      Y.rows = new List[matrixSize - 1];
+      Y.nnz = this.nnz;
+      for(int i = 1; i <= getSize(); i++){
+      Y.rows[i] = new List();
+      List L  = this.rows[i];
+      rows[i].moveFront();
+
+      while(rows[i].index()>=0){
+      Entry tmp = (Entry) rows[i].get();
+      Y.changeEntry(i, tmp.column, tmp.value);
+      rows[i].moveNext();
+
+      }
+      }
+
+      return Y;
+
+      }*/
+  void changeEntry(int i, int j, double value){
+    if(i < 1 || i > getSize() || j < 1 || j > getSize())
+      throw new RuntimeException("Matrix error: changeEntry() =  invalid arguments(i,j)=(" + i + "," + j + ")");
+    List L = rows[i-1];
+    if (L.isEmpty()) {
+      if (value != 0) {
+      //  System.out.println("Case1");
+        Entry W = new Entry(j, value);
+        L.append(W);
+        nnz++;
+      }
+    } else {
+      L.moveFront();
+      Entry E = (Entry) L.get();
+      int k = E.column;
+      while(L.index() != -1){
+        E = (Entry) L.get();
+        k = E.column;
+        if (j <= k) break;
+        L.moveNext();
+      }
+      if (L.index() == -1) {
+        //System.out.println("Case2");
+        if (value != 0) {
+          L.append(new Entry(j, value));
+          nnz++;
+        }
+      }
+      else if (j < k && value != 0)
+      {
+        //System.out.println("Case3");
+        L.insertBefore(new Entry(j, value));
+        nnz++;
+      }
+      //        Entry temp = (Entry)rows[i - 1].get();
+      else {
+        if (value == 0) {
+          //System.out.println("ChangeEntry is deleting a node");
+          L.delete();
+          nnz--;
+        } else {
+          //System.out.println("Case4");
+          E.value = value;
+        }
+      }
+    }
+  }
+  Matrix scalarMult(double x){
+    int newMatrixSize = this.getSize();
+    Matrix newM = new Matrix(newMatrixSize);
+    for(int i = 1; i <= newMatrixSize; i++){
+      List itRow = rows[i - 1];
+      itRow.moveFront();
+      while(itRow.index() != -1){
+        Entry c = (Entry)itRow.get();
+        newM.changeEntry(i, c.column, (x*c.value));
+        itRow.moveNext();
+      }
+    }
+
+    return newM;
+  }
+
+
+  Matrix add(Matrix M) {
+    if(getSize() != M.getSize()) {
+      throw new RuntimeException("Matrix Error: Matrices not same size");
+    }
+    int c = 0, e2 = 0;
+    double v1 = 0, v2 = 0;
+    List temp1, temp2;
+    Matrix addM = new Matrix(getSize());
+    //iterate through 1->end of Matrix
+    for(int i = 1; i < rows.length; i++) {
+      temp1 = M.rows[i];
+      temp2 = this.rows[i];
+      //go through all types
+      //if one Matrix is empty.
+      if(temp1.isEmpty() && !temp2.isEmpty()) {
+        temp2.moveFront();
+        while(temp2.index() != -1) {
+          addM.changeEntry(i, ((Entry)temp2.get()).column, ((Entry)temp2.get()).value);
+          temp2.moveNext();
+          addM.nnz++;
+        }
+      }else if(!temp1.isEmpty() && temp2.isEmpty()) {
+        temp1.moveFront();
+        while(temp1.index() != -1) {
+          addM.changeEntry(i, ((Entry)temp1.get()).column, ((Entry)temp1.get()).value);
+          temp1.moveNext();
+          addM.nnz++;
+        }
+        //not empty Matrix
+      }else if(!temp1.isEmpty() && !temp2.isEmpty()) {
+        temp2.moveFront();
+        temp1.moveFront();
+        //checks to see if at Matrix is empty/at end
+        while(temp1.index() != -1 && temp2.index() != -1) {
+          //equal
+          if(((Entry)temp1.get()).column == ((Entry)temp2.get()).column) {
+            v1 = ((Entry)temp1.get()).value;
+            v2 = ((Entry)temp2.get()).value;
+            c = ((Entry)temp2.get()).column;
+            addM.changeEntry(i, c, (v1+v2));
+            temp1.moveNext();
+            if(!this.equals(M))
+              temp2.moveNext();
+            ///if temp1 < temp2
+            //this < M
+          }else if(((Entry)temp1.get()).column < ((Entry)temp2.get()).column) {
+            v1 = ((Entry)temp1.get()).value;
+            c = ((Entry)temp1.get()).column;
+            addM.changeEntry(i, c, v1);
+            temp1.moveNext();
+            addM.nnz++;
+            //if temp1>temp2
+          }else if(((Entry)temp1.get()).column > ((Entry)temp2.get()).column) {
+            v2 = ((Entry)temp2.get()).value;
+            c = ((Entry)temp2.get()).column;
+            addM.changeEntry(i, c, v2);
+            temp2.moveNext();
+            addM.nnz++;
+          }
+        }
+        while(temp1.index() != -1) {
+          addM.changeEntry( i, ((Entry)temp1.get()).column, ((Entry)temp1.get()).value);
+          temp1.moveNext();
+          addM.nnz++;
+        }
+        while(temp2.index() != -1) {
+          addM.changeEntry(i, ((Entry)temp2.get()).column, ((Entry)temp2.get()).value);
+          temp2.moveNext();
+          addM.nnz++;
+        }
+      }
+    }
+    return addM;
+  }
+
+  //returns a new Matrix that is the difference of the Matrix with M
+  //pre: getSize() ==M.getSize()
+  //rehash of add() except it minuses
+  Matrix sub(Matrix M){
+    if(getSize() != M.getSize()) {
+      throw new RuntimeException("Matrix Error: Matrices must be the same size");
+    }
+    //add the negative
+    Matrix Y = new Matrix(getSize());
+    M = (M.scalarMult(-1));
+    Y = (this.add(M));
+    return Y;
+  }
+
+  Matrix transpose(){
+    int newMatrixSize = this.getSize();
+    Matrix newM = new Matrix(newMatrixSize);
+    for(int i = 1; i <= newMatrixSize; i++){
+      List itRow = rows[i - 1];
+      // if(!itRow[i].isEmpty()){
+      itRow.moveFront();
+      //  itRow[i].moveFront();
+      while(itRow.index() != -1){
+        Entry c = (Entry)itRow.get();
+        newM.changeEntry(c.column, i, c.value);
+        itRow.moveNext();
+      }
+    }
+    return newM;
+  }
+
+
+
+
+
+
+
+
+
+
+  Matrix mult(Matrix M){
+    if(this.getSize() != M.getSize()){
+      throw new RuntimeException("Matrix");
+
+    } 
+    int newMatrixSize = this.getSize();
+    Matrix newM = M.transpose();
+    Matrix resultMatrix = new Matrix(newMatrixSize);
+    double resultMatrix_Entry = 0;
+    for(int i = 1; i <= newMatrixSize; i++){
+      for(int j = 1; j<= newMatrixSize; j++){
+        List itRow_A = this.rows[i - 1];
+        List itRow_B = newM.rows[j-1];
+        itRow_A.moveFront();
+        itRow_B.moveFront();
+        while((itRow_A.index() != -1) && (itRow_B.index() != -1)){
+          Entry c_A = (Entry)itRow_A.get();
+          Entry c_B = (Entry) itRow_B.get();
+          if(c_A.column == c_B.column){
+            resultMatrix_Entry += (c_A.value)*(c_B.value);
+            itRow_A.moveBack();
+            itRow_B.moveNext();
+
+          } else if(c_A.column > c_B.column){
+            itRow_B.moveNext();
+
+          }else{
+            itRow_A.moveNext();
+          }
+
+        }
+        resultMatrix.changeEntry(i, j, resultMatrix_Entry);
+        resultMatrix_Entry = 0;
+      }
+    }
+    return resultMatrix;
+
+  }
+  public String toString(){
+    StringBuffer returnString = new StringBuffer();
+    for(int i = 0; i < this.matrixSize; i++){
+      if(rows[i].length() != 0){
+        returnString.append((i+1) + ":" + rows[i]+ " ");
+      }
+    }
+    return returnString.toString();
+  }
+}
+
